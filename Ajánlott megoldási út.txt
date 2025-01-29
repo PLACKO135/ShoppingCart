@@ -1,0 +1,65 @@
+1) Mivel számos olyan metódusra vonatkozik a teszt, ami még nem létezik az osztályban, ezért elsõ lépés, hogy azokat implementálni kell!
+Szerencsére ez automatikusan is megoldható!
+- Rááll a pirossal aláhúzott metódusra, majd Alt+Enter és a helyi menüben Generate Method
+
+Az így létrejött vázszerkezeteket kell majd "élettel" megtölteni!
+AddProduct; RemoveProduct; GetTotalPrice; GetProducts
+
+A tesztekbõl látszik, hogy a GetProducts visszatérési értékéhez hozzá kell nyúlni!
+List<Product> -ra írom át
+
+Ezután futtatható a teszt és egybõl 5-bõl 5 hibás lesz.
+
+A tényleges munka most kezdõdik.
+
+Metódusról-metódusra haladva implementáljuk a törzs részeket.
+
+a) AddProduct_IncreasesProductCount()
+
+ _products.Add(new Product(productName, price));
+
+ Ezután már egy zöld teszt lesz!
+
+ b) RemoveProduct_DecreasesProductCount()
+
+ A feladat nehezebb része. A teszthez ténylegesen ki kell törölni a megadott terméket a kosárból.
+ A teszt nem foglalkozik azzal az esettel, ha nincs a termék a kosárban.
+ Ez pedig fontos dolog, de most átlépjük! (Test Driven = Amit kér a teszt megcsinálom és több energiát nem teszek bele.)
+
+ _products.Remove(_products.Find(prod => prod.Name == deleteProductName));
+
+ Nem szép, mivel a null probléma nincs kezelve!
+
+ c)  GetTotalPrice_ReturnsCorrectSum()
+
+         public double GetTotalPrice()
+        {
+            return _products.Sum(p => p.Price); 
+        }
+
+
+ d)  RemoveProduct_ThrowsException_IfProductNotInCart()
+
+ Ennél a tesztnél viszont már arra mennek, hogy ne lehessen eltávolítani
+ nem létezõ terméket a kosárból.
+ Amit korábban átléptünk, most meg kell csinálni!
+ Ilyenkor van az,hogy refaktorálunk is egyben!
+
+            Product? foundedItem = _products.Find(prod => prod.Name == deleteProductName);
+            if (foundedItem is null)
+            {
+                throw new InvalidOperationException($"{deleteProductName} product isn't in backet!");
+            }
+            else
+            {
+                _products.Remove(foundedItem);
+            }
+
+
+ e)  GetProducts_ReturnsCorrectProducts()
+
+         public List<Product> GetProducts()
+        {
+            return _products;
+        }
+

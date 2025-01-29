@@ -1,4 +1,5 @@
-﻿namespace ShoppingCartProject.Models
+﻿
+namespace ShoppingCartProject.Models
 {
     public class ShoppingCart
     {
